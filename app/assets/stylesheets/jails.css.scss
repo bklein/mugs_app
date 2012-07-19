@@ -1,0 +1,16 @@
+.mugshot_box{
+    float: left;
+    width: 200px;
+    height: 200px;
+    margin: 20px;
+    border: 5px solid #666666;
+}
+
+.mugshot_box img{
+    width: 150px;
+    margin-left: 25px;
+}
+.inmate_name{
+    font: 18pt Helvetica;
+    margin-left: 25px;
+}
