@@ -1,0 +1,26 @@
+<%= form_for @order do |f| %>
+  <%= f.hidden_field :stripe_card_token %>
+  <%= f.hidden_field :booking_id %>
+  <%= f.hidden_field :inmate_name %>
+  
+ 
+  <h3>Purchasing removal of booking <%= @order.booking_id %> for $100</h3>
+  <div class="field">
+    <%= f.label :email, "Please enter your email address (for email confirmation of order)" %>
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= label_tag :card_number, "Credit Card Number" %>
+    <%= text_field_tag :card_number, nil, name: nil %>
+  </div>
+  <div class="field">
+    <%= label_tag :card_code, "CCV Code" %>
+    <%= text_field_tag :card_code, nil, name: nil %>
+  </div>
+  <div class="field">
+    <%= label_tag :card_month, "Card Expiration" %>
+    <%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month"} %>
+    <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"} %>
+  </div>
+  <div class="actions"><%= f.submit "Purchase product" %></div>
+<% end %>

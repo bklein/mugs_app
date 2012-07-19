@@ -18,3 +18,4 @@ pickle-email-*.html
 *~
 /nbproject/private/
 /config/initializers/stripe.rb
+/public/uploads/*

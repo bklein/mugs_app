@@ -1,0 +1,2 @@
+module JailsHelper
+end
