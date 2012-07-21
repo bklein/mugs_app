@@ -2,7 +2,7 @@
 
   <% @bookings.each do |b| %>
     <div class="mugshot_box" > 
-      <%= link_to image_tag(b.mugshot_url(:thumb).to_s),jail_booking_path(@jail,b) %><br />
+      <%= link_to image_tag(b.mugshot_url(:thumb).to_s, :alt => b.inmate_name),jail_booking_path(@jail,b) %><br />
       <div class="inmate_name">
         <%= b.inmate_name %>
       </div>

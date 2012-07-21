@@ -1,5 +1,6 @@
 class Jails < ActiveRecord::Base
   # attr_accessible :title, :body
+  attr_accessible :short_name, :full_name
   
   has_many :bookings
   

@@ -53,22 +53,20 @@ describe "ViewMugsNavigations" do
       visit jail_path(jail)
       
       booking = Bookings.first
-      # save_and_open_page
-      click_link find(:xpath, "//a[contains(@href, #{booking.id})]")
+      
+      #click_link find(:xpath, "//a[contains(@href, #{booking.id})]")
+      find(:xpath, "//a/img[@alt='#{booking.inmate_name}']/..").click
       
       @charges = Charges.find_all_by_booking_id(booking.id) 
       @charges.each do |charge| 
         page.should have_content(charge.charge_name)
       end
-      
-      page.should have_link("Click to remove")
+      # save_and_open_page
+      page.should have_link("Remove")
      
      
     end
     
-    it "should let you order a mug removal" do
-      visit new_order_path
-      
-    end
+    
   end
 end
