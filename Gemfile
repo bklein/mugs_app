@@ -53,3 +53,6 @@ end
 
 # stripe gem for payment
 gem 'stripe'
+
+# pagination gem
+gem 'kaminari'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120720203446) do
+ActiveRecord::Schema.define(:version => 20120728201545) do
 
   create_table "bookings", :force => true do |t|
     t.string   "booking_no"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20120720203446) do
     t.datetime "updated_at",                          :null => false
     t.string   "mugshot"
     t.boolean  "is_purchased",     :default => false
+    t.boolean  "is_downloaded",    :default => false
   end
 
   create_table "charges", :force => true do |t|
@@ -36,10 +37,7 @@ ActiveRecord::Schema.define(:version => 20120720203446) do
   create_table "download_tasks", :force => true do |t|
     t.integer  "jail_id"
     t.string   "booking_id"
-    t.boolean  "is_downloaded"
-    t.boolean  "is_processed"
     t.string   "remote_filename"
-    t.string   "local_filename"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
@@ -55,11 +53,11 @@ ActiveRecord::Schema.define(:version => 20120720203446) do
     t.integer  "booking_id"
     t.string   "inmate_name"
     t.string   "email"
-    t.boolean  "is_complete"
+    t.boolean  "is_complete",       :default => false
     t.string   "stripe_card_token"
     t.string   "remote_ip"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
   end
 
 end

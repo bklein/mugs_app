@@ -19,3 +19,5 @@ pickle-email-*.html
 /nbproject/private/
 /config/initializers/stripe.rb
 /public/uploads/*
+/db/development.db
+/lock/

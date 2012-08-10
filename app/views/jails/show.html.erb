@@ -1,4 +1,5 @@
-<%= @jail.full_name %>
+<%= @jail.full_name %><br />
+<%= paginate @bookings %>
 
   <% @bookings.each do |b| %>
     <div class="mugshot_box" > 

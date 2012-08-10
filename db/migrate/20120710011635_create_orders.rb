@@ -4,7 +4,7 @@ class CreateOrders < ActiveRecord::Migration
       t.integer :booking_id
       t.string :inmate_name
       t.string :email
-      t.boolean :is_complete
+      t.boolean :is_complete, :default => false
       t.string :stripe_card_token
       t.string :remote_ip
 

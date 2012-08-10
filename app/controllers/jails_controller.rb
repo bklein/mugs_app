@@ -6,7 +6,9 @@ class JailsController < ApplicationController
 	
   def show
       @jail = Jails.find(params[:id])
-      @bookings = Bookings.find_all_by_jail_id(params[:id], :conditions => ['is_purchased = ?', false])
+      @bookings = Bookings.where(
+        'jail_id = ? AND is_purchased = ? AND is_downloaded = ?',
+         params[:id], false, true).order("booking_datetime DESC").page(params[:page]).per(10)
   end
 	
 
