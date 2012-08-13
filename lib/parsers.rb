@@ -1,7 +1,7 @@
 module Parsers
   module Alachua
     def parse
-      
+      num_downloaded=0
       # time for performance
       start_time = Time.now
       
@@ -164,6 +164,7 @@ module Parsers
               :remote_filename => inmate[:mugshot_url]
             )
             puts "Saved #{booking.inmate_name}"
+            num_downloaded+=1
           end
                  
         end
@@ -174,7 +175,7 @@ module Parsers
       
       time_str = Time.at(total_time).utc.strftime("Parse took %M minutes and %S seconds.")
       puts time_str
-      puts "alachua test #{inmates.length}"
+      puts "Downloaded #{num_downloaded} bookings out of #{inmates.length}"
 
       # our work done, remove lock file
       File.delete(lock_file) if File.writable?(lock_file)
