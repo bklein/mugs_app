@@ -8,6 +8,8 @@ namespace :image do
     #@downloads = DownloadTask.all(:conditions => ["is_downloaded = ?", false], :limit => 10)
     @downloads = DownloadTask.all
     
+    start_time = Time.now
+    
     @downloads.each do |download|
       
      # filename = Rails.root.join('image_workspace', download.local_filename)
@@ -36,10 +38,12 @@ namespace :image do
 
 
 
-
         puts "Downloaded #{download.remote_filename} for ID #{@booking.id}"
       end
     end
+    time = Time.now - start_time
+    timestr = Time.at(time).utc.strftime("Downloads took %M minutes and %S secs.")
+    puts timestr
   end
-  
+
 end
