@@ -3,6 +3,8 @@ set :repository,  "git@github.com:bklein/mugs_app.git"
 
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
+set :branch, "alachua_parser"
+
 set :user 'deploy'
 set :deploy_to "/www/mugs_app/"
 set :deploy_via, :remote_cache
