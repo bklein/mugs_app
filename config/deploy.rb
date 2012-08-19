@@ -5,15 +5,15 @@ set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 set :branch, "alachua_parser"
 
-set :user 'deploy'
-set :deploy_to "/www/mugs_app/"
+set :user, 'deploy'
+set :deploy_to, "/www/mugs_app/"
 set :deploy_via, :remote_cache
 set :user_sudo, false
 
 
 role :web, "demo.slammervanity.com"                          # Your HTTP server, Apache/etc
 role :app, "demo.slammervanity.com"                          # This may be the same as your `Web` server
-role :db,  "localhost", :primary => true # This is where Rails migrations will run
+role :db,  "demo.slammervanity.com", :primary => true # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
 
 # if you want to clean up old releases on each deploy uncomment this:
