@@ -21,3 +21,5 @@ pickle-email-*.html
 /public/uploads/*
 /db/development.db
 /lock/
+*.txt
+*.pid
