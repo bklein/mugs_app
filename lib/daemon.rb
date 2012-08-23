@@ -14,9 +14,21 @@ parserlog = Rails.root.join('log', 'parserlog.log')
 # the delay between runs in seconds
 #delay_time = 5*60
 delay_time = 1
-while true do
-  AlachuaParser.parse parserlog
-  ImageDownloader.download imagelog
+
+alachua = AlachuaParser.new(parserlog)
+downloader = ImageDownloader.new imagelog
+
+while true do 
+  begin
+    alachua.parse
+  rescue
+  end
+  
+  begin 
+    downloader.download
+  end
+  
+  
   sleep delay_time
 end
 

@@ -1,15 +1,38 @@
 require 'open-uri'
 require 'digest'
 
-class ImageDownloader
-  def self.download logfile
-        #@downloads = DownloadTask.all(:conditions => ["is_downloaded = ?", false], :limit => 10)
-    f = File.open(logfile, 'a+') # log things to passed log file location
+class Parser
+    def initialize(logfile)
+    @logfile = logfile
+  end
+  
+  def log msg
+    File.open(@logfile, 'a+') do |f|
+      f.puts msg
+    end
+  end
+end
+
+class ImageDownloader < Parser
+  def initialize(logfile)
+    @logfile = logfile
+  end
+  
+  def log msg
+    File.open(@logfile, 'a+') do |f|
+      f.puts msg
+    end
+  end
+  
+  def download 
+    #@downloads = DownloadTask.all(:conditions => ["is_downloaded = ?", false], :limit => 10)
+    
     
     @downloads = DownloadTask.all
-    
+    num_downloaded=0
+    num_failed=0
     start_time = Time.now
-    
+    log "Downloading begins at #{start_time}"
     @downloads.each do |download|
       
      # filename = Rails.root.join('image_workspace', download.local_filename)
@@ -32,25 +55,27 @@ class ImageDownloader
             download.destroy
           rescue => error_msg
             msg = error_msg.backtrace.join("\n")
-            f.puts "Error on saving #{download.remote_filename}: #{msg}"
+            log "Error on saving #{download.remote_filename}: #{msg}"
+            num_failed+=1
           end
         end
 
 
 
-        f.puts "Downloaded #{download.remote_filename} for ID #{@booking.id}"
+        log "Downloaded #{download.remote_filename} for ID #{@booking.id}"
+        num_downloaded+=1
       end
     end
     time = Time.now - start_time
-    timestr = Time.at(time).utc.strftime("Downloads took %M minutes and %S secs.")
-    f.puts timestr
-    f.close
+    log Time.at(time).utc.strftime("Downloads took %M minutes and %S secs.")
+    log "Downloaded #{num_downloaded} images, #{num_failed} failed, finished at #{Time.now}"
+    
   end
 end
 
 
-class AlachuaParser
-  def self.parse logfile
+class AlachuaParser < Parser
+  def parse 
     num_downloaded=0
     # time for performance
     start_time = Time.now
@@ -59,11 +84,11 @@ class AlachuaParser
     base_url = 'http://oldweb.circuit8.org'
     inmatelist_url = "#{base_url}/inmatelist.php"
 
-    f = File.open(logfile, 'a+')
+    
     # jail setting
     img_type = "jpg"
-    f.puts "Start time: #{Time.now}"
-    f.puts "Getting links..."
+    log "Start time: #{Time.now}"
+    log "Getting links..."
     doc = Nokogiri::HTML(open(inmatelist_url))
 
     inmates = []		
@@ -89,7 +114,7 @@ class AlachuaParser
       inmates << inmate
     end
 
-    f.puts "Finished gathering links. #{inmates.length} links gathered."
+    log "Finished gathering links. #{inmates.length} links gathered."
     #puts "#{inmate_name} #{href} #{bookno} #{mugshot_url}"
 
     jail = Jails.find_by_short_name("alachua_fl")
@@ -161,7 +186,7 @@ class AlachuaParser
         begin 
           booking.booking_datetime = Time.new(year, month, day, hour, minute)
         rescue => msg
-          f.puts "Error on date #{year} #{month} #{day} #{hour} #{minute}"
+          log "Error on date #{year} #{month} #{day} #{hour} #{minute}"
         end
 
 
@@ -188,14 +213,14 @@ class AlachuaParser
 #                end
 
           if charges.empty?
-            f.puts "Skipping #{inmate[:name]} due to empty charges (too soon?)"
+            log "Skipping #{inmate[:name]} due to empty charges (too soon?)"
             raise ActiveRecord::Rollback
           end
           
 
           charges.each do |charge|
             if charge.length < 5
-              f.puts "Skipping #{inmate[:name]} due to malformed charge (too soon?)"
+              log "Skipping #{inmate[:name]} due to malformed charge (too soon?)"
               raise ActiveRecord::Rollback
             end
             Charges.create!(:charge_name => charge, :booking_id => booking.id)
@@ -207,7 +232,7 @@ class AlachuaParser
             :booking_id => booking.id,
             :remote_filename => inmate[:mugshot_url]
           )
-          f.puts "Saved #{booking.inmate_name}"
+          log "Saved #{booking.inmate_name}"
           num_downloaded+=1
         end
 
@@ -218,10 +243,10 @@ class AlachuaParser
     total_time = Time.now-start_time
 
     time_str = Time.at(total_time).utc.strftime("Parse took %M minutes and %S seconds.")
-    f.puts time_str
-    f.puts "Downloaded #{num_downloaded} bookings out of #{inmates.length}, #{num_skipped} skipped."
-    f.puts "End time #{Time.now}"
-    f.close
+    log time_str
+    log "Downloaded #{num_downloaded} bookings out of #{inmates.length}, #{num_skipped} skipped."
+    log "End time #{Time.now}"
+    
   end
 end
 
