@@ -1,6 +1,3 @@
-*.rbc
-*.sassc
-.sass-cache
 capybara-*.html
 .rspec
 /.bundle
@@ -14,3 +11,14 @@ capybara-*.html
 **.orig
 rerun.txt
 pickle-email-*.html
+~*
+*~
+/nbproject/private/
+/config/initializers/stripe.rb
+/config/database.yml
+/public/uploads/*
+/db/development.db
+/lock/
+*.txt
+*.pid
+
