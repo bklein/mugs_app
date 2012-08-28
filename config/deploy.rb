@@ -6,15 +6,18 @@ set :scm, :git
 set :branch, "alachua_parser"
 
 set :user, 'bklein'
-set :deploy_to, "/www/#{application}/"
-set :deploy_via, :remote_cache
-set :user_sudo, false
+set :deploy_to, "/www/demo/#{application}/"
+# set :deploy_via, :remote_cache
+
 
 
 role :web, "demo.slammervanity.com"                          # Your HTTP server, Apache/etc
 role :app, "demo.slammervanity.com"                          # This may be the same as your `Web` server
 role :db,  "demo.slammervanity.com", :primary => true # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
+default_run_options[:pty] = true
+ssh_options[:forward_agent] = true
+set :use_sudo, false
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
@@ -32,10 +35,16 @@ namespace :deploy do
   
   task :setup do
     run "mkdir -p #{shared_path}/config"
+    run "mkdir -p #{shared_path}/uploads"
     puts File.read("config/database.example.yml"), "#{shared_path}/datbase.yml"
     puts "Now edit the files in #{shared_path}" 
   end
+  task :symlinks do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{shared_path}/uploads #{release_path}/public/uploads"
+  end
   
+  after "deploy:update", "deploy:symlinks"
 end
 
 
