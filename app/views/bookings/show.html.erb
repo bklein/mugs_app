@@ -1,0 +1,18 @@
+<% if @booking.is_purchased %>
+  <h1>The requested resource is unavailable</h1> 
+<% else %>
+
+  <h1><%= @booking.inmate_name %></h1>
+  <h2>Bond: <%= @booking.bond %></h2>
+  <h2>Booking time: <%= @booking.booking_datetime.in_time_zone("Eastern Time (US & Canada)").strftime("%m/%d/%Y at %I:%M%p %Z   ")
+ %></h2>
+  <%= image_tag @booking.mugshot_url.to_s %>
+  <% @charges.each do |c| %>
+    <p>
+      <%= c.charge_name %>
+    </p>
+  <% end %>
+
+  <%= link_to "Remove mugshot", remove_booking_url(:id => @booking.id) %>
+  
+<% end %>  

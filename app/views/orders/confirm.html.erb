@@ -1,0 +1,10 @@
+<h3>Please confirm your purchase.</h3>
+<p>
+  You are removing mugshot for  
+  <%= @order.inmate_name %> for $100. 
+  To confirm purchase, click "Confirm Purchase"
+</p>
+  
+<%= form_for @order, :url => confirm_purchase_url(@order) do |f| %>
+  <%= f.submit "Confirm Purchase" %> 
+<% end %>

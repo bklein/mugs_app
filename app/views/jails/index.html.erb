@@ -1,0 +1,4 @@
+<h2>Select a jail</h2>
+<% @jails.each do |jail| %>
+	<%= link_to jail.full_name, jail_path(jail) %>
+<% end %>

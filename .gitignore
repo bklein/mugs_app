@@ -21,4 +21,7 @@ pickle-email-*.html
 /lock/
 *.txt
 *.pid
+<<<<<<< HEAD
 
+=======
+>>>>>>> alachua_parser
