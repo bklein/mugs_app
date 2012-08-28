@@ -56,22 +56,31 @@ class OrdersController < ApplicationController
   # confirm purchase
   def confirm
     @order = Order.find(params[:id])
+    @order.transaction do
+      begin
+        charge = Stripe::Charge.create(
+          :amount => 10000,
+          :currency => 'usd',
+          :card => @order.stripe_card_token,
+          :description => "#{@order.booking_id} - #{@order.inmate_name} - #{@order.email}"
+        )
+      rescue Stripe::InvalidRequestError => e
+        logger.error "Stripe error on charge: #{e.message}"
+        errors.add :base, "There was a problem: #{e.message}"
+      rescue Stripe::CardError => e
+        logger.error "Stripe error on charge: #{e.message}"
+        redirect_to remove_booking_url(:id => @order.booking_id)
+      end
+      @order.is_complete = true
+      @booking = Bookings.find(@order.booking_id)
+      @booking.is_purchased = true
+
+      @order.save
+      @booking.save
+
+      render 'thank_you'  
+    end
     
-    charge = Stripe::Charge.create(
-      :amount => 10000,
-      :currency => 'usd',
-      :card => @order.stripe_card_token,
-      :description => "#{@order.booking_id} - #{@order.inmate_name} - #{@order.email}"
-    )
-    
-    @order.is_complete = true
-    @booking = Bookings.find(@order.booking_id)
-    @booking.is_purchased = true
-    
-    @order.save
-    @booking.save
-    
-    render 'thank_you'
   end
   
   # PUT /orders/1

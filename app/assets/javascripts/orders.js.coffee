@@ -29,6 +29,6 @@ purchase =
             $('#order_stripe_card_token').val(response.id)
             $('#new_order')[0].submit()
         else
-            alert(response.error.message)
+            $('#stripe_errors').text(response.error.message)
             $('input[type=submit]').attr('disabled', false)
         
